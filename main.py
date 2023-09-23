@@ -25,19 +25,19 @@ BoxLayout:
         text: "Change Theme Color"
         theme_text_color: "Secondary"
         on_release: app.change_theme_color()
+        size_hint_y: None
+        height: dp(48)
         pos_hint: {'center_x': 0.5}
-        
 
     MDRaisedButton:
         text: "Change Buttons Color"
         theme_text_color: "Secondary"
         on_release: app.change_button_color()
+        size_hint_y: None
+        height: dp(48)
         pos_hint: {'center_x': 0.5}
-        
-        
 
     MDScreen:
-
         MDBoxLayout:
             orientation: 'vertical'
             spacing: dp(10)
@@ -50,8 +50,7 @@ BoxLayout:
                 helper_text_mode: "on_error"
                 input_filter: "float"
                 mode: "rectangle"
-                size_hint_x: None
-                width: dp(250)
+                size_hint_x: 0.7  # 70% of screen width
 
             MDTextField:
                 id: entry2
@@ -60,8 +59,7 @@ BoxLayout:
                 helper_text_mode: "on_error"
                 input_filter: "float"
                 mode: "rectangle"
-                size_hint_x: None
-                width: dp(250)
+                size_hint_x: 0.7  # 70% of screen width
 
             MDBoxLayout:
                 orientation: 'horizontal'
@@ -91,6 +89,8 @@ BoxLayout:
 
             MDRaisedButton:
                 text: "Submit"
+                size_hint_x: None
+                width: dp(120)
                 pos_hint: {'center_x': 0.5}
                 on_release: app.submit()
 
@@ -99,30 +99,8 @@ BoxLayout:
                 text: "Result: "
                 theme_text_color: "Secondary"
                 font_style: "Caption"
-
-            MDBoxLayout:
-                orientation: 'horizontal'
-                spacing: dp(10)
-
-                MDRaisedButton:
-                    text: "Clear History"
-                    on_release: app.clear_history()
-
-                MDRaisedButton:
-                    text: "Clear Entry"
-                    on_release: app.clear_entry()
-
-            MDLabel:
-                text: "History"
-                theme_text_color: "Secondary"
-                font_style: "Caption"
-
-            MDScrollView:
-                id: history_scrollview
-
-                MDList:
-                    id: history_list
 '''
+
 
 class CalculatorApp(MDApp):
     def build(self):
