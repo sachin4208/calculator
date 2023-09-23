@@ -3,109 +3,166 @@ from kivymd.app import MDApp
 from kivymd.uix.button import MDRaisedButton
 from kivymd.uix.textfield import MDTextField
 from kivymd.uix.label import MDLabel
-from kivymd.uix.screen import MDScreen
-from kivymd.uix.boxlayout import MDBoxLayout
-from kivymd.uix.scrollview import MDScrollView
+from kivy.uix.screenmanager import ScreenManager, Screen
+from kivy.uix.scrollview import ScrollView
 from kivymd.uix.list import OneLineListItem
-from kivymd.uix.dialog import MDDialog
-from kivy.core.window import Window
-
 import random
+from kivymd.uix.dialog import MDDialog
 
 # Create a list to store calculation history
 calculation_history = []
 
 KV = '''
-BoxLayout:
-    orientation: 'vertical'
-    padding: dp(16)
-    spacing: dp(7)
+ScreenManager:
+    MainScreen:
 
-    MDRaisedButton:
-        text: "Change Theme Color"
-        theme_text_color: "Secondary"
-        on_release: app.change_theme_color()
-        size_hint_y: None
-        height: dp(48)
-        pos_hint: {'center_x': 0.5}
+<MainScreen>:
+    name: 'main'
+    BoxLayout:
+        orientation: 'vertical'
+        spacing:dp(7)
 
-    MDRaisedButton:
-        text: "Change Buttons Color"
-        theme_text_color: "Secondary"
-        on_release: app.change_button_color()
-        size_hint_y: None
-        height: dp(48)
-        pos_hint: {'center_x': 0.5}
+        MDRaisedButton:
+            text: "Change Theme Color"
+            theme_text_color: "Secondary"
+            on_release: app.change_theme_color()
+            size_hint: None, None
+            size: dp(200), dp(48)
+            pos_hint: {'center_x': 0.5}
 
-    MDScreen:
-        MDBoxLayout:
-            orientation: 'vertical'
+        MDRaisedButton:
+            text: "Change Buttons Color"
+            theme_text_color: "Secondary"
+            on_release: app.change_button_color()
+            size_hint: None, None
+            size: dp(200), dp(48)
+            pos_hint: {'center_x': 0.5}
+
+        MDTextField:
+            id: entry1
+            hint_text: "Enter first number"
+            helper_text: "Numbers only"
+            helper_text_mode: "on_error"
+            input_filter: "float"
+            mode: "rectangle"
+            size_hint: None, None
+            width: dp(250)
+            height: dp(48)
+            pos_hint: {'center_x': 0.5}
+
+        MDTextField:
+            id: entry2
+            hint_text: "Enter second number"
+            helper_text: "Numbers only"
+            helper_text_mode: "on_error"
+            input_filter: "float"
+            mode: "rectangle"
+            size_hint: None, None
+            width: dp(250)
+            height: dp(48)
+            pos_hint: {'center_x': 0.5}
+
+        BoxLayout:
+            orientation: 'horizontal'
             spacing: dp(10)
-            padding: dp(16)
-
-            MDTextField:
-                id: entry1
-                hint_text: "Enter first number"
-                helper_text: "Numbers only"
-                helper_text_mode: "on_error"
-                input_filter: "float"
-                mode: "rectangle"
-                size_hint_x: 0.7  # 70% of screen width
-
-            MDTextField:
-                id: entry2
-                hint_text: "Enter second number"
-                helper_text: "Numbers only"
-                helper_text_mode: "on_error"
-                input_filter: "float"
-                mode: "rectangle"
-                size_hint_x: 0.7  # 70% of screen width
-
-            MDBoxLayout:
-                orientation: 'horizontal'
-                spacing: dp(10)
-
-                MDRaisedButton:
-                    text: "+"
-                    on_release: app.set_operator("+")
-
-                MDRaisedButton:
-                    text: "-"
-                    on_release: app.set_operator("-")
-
-                MDRaisedButton:
-                    text: "*"
-                    on_release: app.set_operator("*")
-
-                MDRaisedButton:
-                    text: "/"
-                    on_release: app.set_operator("/")
-
-            MDLabel:
-                id: selected_operator_label
-                text: "Selected Operator: "
-                theme_text_color: "Secondary"
-                font_style: "Caption"
+            size_hint: None, None
+            width: dp(290)
+            height: dp(50)
+            pos_hint: {'center_x': 0.5}
 
             MDRaisedButton:
-                text: "Submit"
-                size_hint_x: None
-                width: dp(120)
-                pos_hint: {'center_x': 0.5}
-                on_release: app.submit()
+                text: "+"
+                size_hint: None, None
+                size: dp(45), dp(45)
+                on_release: app.set_operator("+")
+                pos_hint: {'center_y': 0.4}
 
-            MDLabel:
-                id: result_label
-                text: "Result: "
-                theme_text_color: "Secondary"
-                font_style: "Caption"
+            MDRaisedButton:
+                text: "-"
+                size_hint: None, None
+                size: dp(45), dp(45)
+                on_release: app.set_operator("-")
+
+            MDRaisedButton:
+                text: "*"
+                size_hint: None, None
+                size: dp(45), dp(45)
+                on_release: app.set_operator("*")
+
+            MDRaisedButton:
+                text: "/"
+                size_hint: None, None
+                size: dp(45), dp(45)
+                on_release: app.set_operator("/")
+
+        MDLabel:
+            id: selected_operator_label
+            text: "Selected Operator: "
+            theme_text_color: "Secondary"
+            font_style: "Caption"
+            size_hint: None, None
+            size: dp(200), dp(48)
+            pos_hint: {'center_x': 0.5}
+
+        MDRaisedButton:
+            text: "Submit"
+            size_hint: None, None
+            size: dp(120), dp(48)
+            pos_hint: {'center_x': 0.5}
+            on_release: app.submit()
+
+        MDLabel:
+            id: result_label
+            text: "Result: "
+            theme_text_color: "Secondary"
+            font_style: "Caption"
+            size_hint: None, None
+            size: dp(200), dp(48)
+            pos_hint: {'center_x': 0.5}
+
+        BoxLayout:
+            orientation: 'horizontal'
+            spacing: dp(10)
+            size_hint: None, None
+            width: dp(200)
+            height: dp(48)
+            pos_hint: {'center_x': 0.5}
+
+            MDRaisedButton:
+                text: "Clear History"
+                on_release: app.clear_history()
+
+            MDRaisedButton:
+                text: "Clear Entry"
+                on_release: app.clear_entry()
+
+        MDLabel:
+            text: "History"
+            theme_text_color: "Secondary"
+            font_style: "Caption"
+            size_hint: None, None
+            size: dp(100), dp(48)
+            pos_hint: {'center_x': 0.5}
+
+        MDScrollView:
+            id: history_scrollview
+            
+            size_hint: None, None
+            size: dp(300), dp(48)
+            pos_hint: {'center_x': 0.5}
+            mode: "rectangle"
+
+            MDList:
+                id: history_list
+                
 '''
 
+class MainScreen(Screen):
+    pass
 
 class CalculatorApp(MDApp):
     def build(self):
         self.theme_cls.theme_style = "Dark"  # Set the initial theme
-        Window.size = (360, 640)
         return Builder.load_string(KV)
 
     def change_theme_color(self):
@@ -123,19 +180,19 @@ class CalculatorApp(MDApp):
         self.theme_cls.primary_palette = random_color
 
     def set_operator(self, operator):
-        self.root.ids.selected_operator_label.text = f"Selected Operator: {operator}"
+        self.root.get_screen('main').ids.selected_operator_label.text = f"Selected Operator: {operator}"
 
     def submit(self):
-        entry1 = self.root.ids.entry1.text
-        entry2 = self.root.ids.entry2.text
+        entry1 = self.root.get_screen('main').ids.entry1.text
+        entry2 = self.root.get_screen('main').ids.entry2.text
 
         try:
             num1 = float(entry1)
             num2 = float(entry2)
-            operator = self.root.ids.selected_operator_label.text.split(': ')[-1].strip()
+            operator = self.root.get_screen('main').ids.selected_operator_label.text.split(': ')[-1].strip()
 
             result = self.perform_operation(num1, num2, operator)
-            result_label = self.root.ids.result_label
+            result_label = self.root.get_screen('main').ids.result_label
             result_label.text = f"Result: {result}"
 
             # Add the calculation to history
@@ -143,7 +200,7 @@ class CalculatorApp(MDApp):
             self.update_history()
 
         except ValueError:
-            result_label = self.root.ids.result_label
+            result_label = self.root.get_screen('main').ids.result_label
             result_label.text = 'Please enter valid numbers.'
 
     def perform_operation(self, num1, num2, operator):
@@ -162,12 +219,12 @@ class CalculatorApp(MDApp):
             return 'Invalid operation.'
 
     def update_history(self):
-        history_list = self.root.ids.history_list
+        history_list = self.root.get_screen('main').ids.history_list
         history_list.clear_widgets()
         for item in calculation_history:
             history_list.add_widget(OneLineListItem(text=item))
         # Scroll to the latest item
-        self.root.ids.history_scrollview.scroll_y = 0
+        self.root.get_screen('main').ids.history_scrollview.scroll_y = 0
 
     def clear_history(self):
         if calculation_history:
@@ -193,19 +250,14 @@ class CalculatorApp(MDApp):
     def confirm_clear_history(self, instance):
         calculation_history.clear()
         self.update_history()
-        self.close_dialog()
-
-    def confirm_clear_history(self, instance):
-        calculation_history.clear()
-        self.update_history()
         self.close_dialog(instance)  # Pass 'instance' as an argument
 
-
     def clear_entry(self):
-        self.root.ids.entry1.text = ""
-        self.root.ids.entry2.text = ""
-        self.root.ids.selected_operator_label.text = "Selected Operator: "
-        self.root.ids.result_label.text = ""
+        main_screen = self.root.get_screen('main')
+        main_screen.ids.entry1.text = ""
+        main_screen.ids.entry2.text = ""
+        main_screen.ids.selected_operator_label.text = "Selected Operator: "
+        main_screen.ids.result_label.text = ""
 
     def close_dialog(self, instance):
         self.dialog.dismiss()
