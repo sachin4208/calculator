@@ -8,6 +8,8 @@ from kivy.uix.scrollview import ScrollView
 from kivymd.uix.list import OneLineListItem
 import random
 from kivymd.uix.dialog import MDDialog
+import webbrowser
+from kivy.uix.boxlayout import BoxLayout
 
 # Create a list to store calculation history
 calculation_history = []
@@ -20,7 +22,8 @@ ScreenManager:
     name: 'main'
     BoxLayout:
         orientation: 'vertical'
-        spacing:dp(7)
+        spacing: dp(7)
+        padding: dp(5)
 
         MDRaisedButton:
             text: "Change Theme Color"
@@ -75,7 +78,6 @@ ScreenManager:
                 size_hint: None, None
                 size: dp(45), dp(45)
                 on_release: app.set_operator("+")
-                pos_hint: {'center_y': 0.4}
 
             MDRaisedButton:
                 text: "-"
@@ -111,11 +113,14 @@ ScreenManager:
             pos_hint: {'center_x': 0.5}
             on_release: app.submit()
 
-        MDLabel:
+        MDRaisedButton:
             id: result_label
             text: "Result: "
-            theme_text_color: "Secondary"
+            md_bg_color: 1, 0, 0, 1  # Set background color to red (RGBA format)
+            theme_text_color: "Custom"
+            text_color: 1, 1, 1, 1  # Set text color to white (1, 1, 1, 1)
             font_style: "Caption"
+            font_size: sp(16)
             size_hint: None, None
             size: dp(200), dp(48)
             pos_hint: {'center_x': 0.5}
@@ -146,16 +151,25 @@ ScreenManager:
 
         MDScrollView:
             id: history_scrollview
-            
             size_hint: None, None
-            size: dp(300), dp(48)
+            size: dp(300), dp(100)
             pos_hint: {'center_x': 0.5}
             mode: "rectangle"
 
             MDList:
                 id: history_list
-                
+                md_bg_color: (1, 0.5, 0) # Set background color to red (RGBA format)
+                text_color: 1, 1, 1, 1  # Set text color to white (1, 1, 1, 1)
+
+        MDRaisedButton:
+            text: "About Developer"
+            theme_text_color: "Secondary"
+            on_release: app.show_developer_info()
+            size_hint: None, None
+            size: dp(200), dp(48)
+            pos_hint: {'center_x': 0.5}
 '''
+
 
 class MainScreen(Screen):
     pass
@@ -261,6 +275,51 @@ class CalculatorApp(MDApp):
 
     def close_dialog(self, instance):
         self.dialog.dismiss()
+
+    def show_developer_info(self):
+        developer_info = (
+            "Developer Name: Sachin Kumar\n\n"
+            "Python Developer.\n\n"
+            "Follow Me on GitHub.\n\n"
+        )
+
+        # Create a box layout to hold the buttons
+        button_box = BoxLayout(orientation="horizontal", spacing=158, size_hint_y=1, height="48dp")
+        
+        button_box.add_widget(
+            MDRaisedButton(
+                text="GitHub",
+                on_release=self.open_github_link
+            )
+        )
+        button_box.add_widget(
+            MDRaisedButton(
+                text="Close",
+                on_release=self.close_dialog1
+            )
+        )
+
+        self.dialog = MDDialog(
+            title="About the Developer",
+            text=developer_info,
+            size_hint=(None, None),
+            size=("300dp", "400dp"),
+            buttons=[],
+        )
+
+        # Add the button_box to the dialog's content
+        self.dialog.add_widget(button_box)
+
+        self.dialog.open()
+
+
+    def open_github_link(self, instance):
+        webbrowser.open("https://github.com/sachin4208")
+
+
+    def close_dialog1(self, instance):
+        self.dialog.dismiss()
+
 
 if __name__ == '__main__':
     CalculatorApp().run()
